@@ -35,7 +35,14 @@ export default function Sidebar({ active, onNavigate, onClose, isOpen }) {
 
       <button
         className="resume-btn"
-        onClick={() => window.open("#", "_blank")}
+        onClick={() => {
+          const url = import.meta.env.VITE_RESUME_URL;
+          if (url && url !== "#") {
+            window.open(url, "_blank");
+          } else {
+            alert("Resume link is still missing in your .env file!");
+          }
+        }}
         aria-label="Download resume PDF"
       >
         ↓ resume.pdf
