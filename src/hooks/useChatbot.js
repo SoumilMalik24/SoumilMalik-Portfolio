@@ -38,20 +38,22 @@ export function useChatbot() {
     setLoading(true);
 
     try {
-      // ── Swap this block in when your FastAPI RAG endpoint is live ──
-      // const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ query: text }),
-      // });
-      // const data = await res.json();
-      // setMessages((prev) => [...prev, { role: "bot", text: data.answer }]);
-
-      // Local fallback until API is ready
-      await new Promise((r) => setTimeout(r, 500));
-      setMessages((prev) => [...prev, { role: "bot", text: getLocalResponse(text) }]);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      });
+      
+      if (!res.ok) throw new Error("Failed to fetch");
+      
+      const data = await res.json();
+      
+      // Fallbacks in case the backend uses a different key name rather than "answer"
+      const botText = data.reply || data.answer || data.response || data.message || data.output || data.text || JSON.stringify(data);
+      
+      setMessages((prev) => [...prev, { role: "bot", text: botText }]);
     } catch {
-      setMessages((prev) => [...prev, { role: "bot", text: "Something went wrong. Try again." }]);
+      setMessages((prev) => [...prev, { role: "bot", text: "Something went wrong. Make sure the backend is running." }]);
     } finally {
       setLoading(false);
     }

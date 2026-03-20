@@ -7,7 +7,7 @@
   --a-border: rgba(230,168,23,0.13);
   --a-border-hover: rgba(230,168,23,0.32);
   --bg: #03072b;
-  --bg2: #0b1448;
+  --bg2: #0b14487d;
   --font: 'JetBrains Mono', monospace;
   --sidebar-w: 240px;
   --scan: repeating-linear-gradient(
@@ -460,7 +460,7 @@ button { font-family: var(--font); cursor: pointer; }
 }
 .chatbot-trigger:hover { background: rgba(230,168,23,0.18); }
 .chatbot-panel {
-  position: fixed; bottom: 110px; right: 14px; width: 300px;
+  position: fixed; bottom: 110px; right: 14px; width: 400px;
   background: rgba(8, 11, 26, 0.98); border: 1px solid rgba(230,168,23,0.2);
   border-radius: 14px; z-index: 20; backdrop-filter: blur(20px);
   overflow: hidden; animation: slidedown 0.2s ease;

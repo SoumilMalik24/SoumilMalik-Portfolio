@@ -1,28 +1,44 @@
 import { useState } from "react";
 
-const INITIAL = { name: "", subject: "", message: "" };
+const INITIAL = { email: "", subject: "", message: "" };
 
 export default function DirectMessageModal({ onClose }) {
   const [form, setForm]     = useState(INITIAL);
   const [status, setStatus] = useState("idle"); // idle | loading | sent
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const set = (field) => (e) => {
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    if (errorMsg) setErrorMsg("");
+  };
+
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSubmit = async () => {
-    if (!form.name.trim() || !form.message.trim()) return;
+    if (!form.email.trim() || !form.message.trim()) {
+      setErrorMsg("Email and message are required.");
+      return;
+    }
+    if (!validateEmail(form.email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
     setStatus("loading");
     try {
-      // ── Swap in your FastAPI endpoint ──
-      // await fetch(`${import.meta.env.VITE_API_URL}/contact`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(form),
-      // });
-      await new Promise((r) => setTimeout(r, 1000));
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error("Failed to send");
       setStatus("sent");
     } catch {
       setStatus("idle");
-      alert("Failed to send. Please try again.");
+      alert("Failed to send. Please ensure the backend is running and try again.");
     }
   };
 
@@ -44,9 +60,10 @@ export default function DirectMessageModal({ onClose }) {
             <div className="modal-title">[ direct_message → soumil ]</div>
             <input
               className="amber-input"
-              placeholder="your name *"
-              value={form.name}
-              onChange={set("name")}
+              type="email"
+              placeholder="your email *"
+              value={form.email}
+              onChange={set("email")}
             />
             <input
               className="amber-input"
@@ -60,6 +77,7 @@ export default function DirectMessageModal({ onClose }) {
               value={form.message}
               onChange={set("message")}
             />
+            {errorMsg && <div style={{ color: "#e64848", fontSize: "12px", marginBottom: "10px" }}>{errorMsg}</div>}
             <button
               className="amber-btn"
               onClick={handleSubmit}
