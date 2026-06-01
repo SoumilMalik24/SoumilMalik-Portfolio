@@ -1,0 +1,6 @@
+group,bg,text,pills
+Agentic AI,#e8e0d4,#6b5a42,LangGraph|CrewAI|LangChain|MCP|RAG|Hugging Face Transformers|OpenAI API
+LLMOps & Automation,#dce8d4,#3a5a2c,LangSmith|Prompt Engineering|Token Optimization|Cost Tracking|n8n|Make.com
+Backend & Infra,#e4dcd0,#6b4a28,FastAPI|Flask|Celery|Redis|Docker|CI/CD|AWS
+ML & DL,#dcd8e4,#4a3a6a,PyTorch|TensorFlow|Scikit-learn|Transfer Learning|Knowledge Distillation|MLflow
+Languages & DB,#d8e4e0,#2a5a4a,Python|SQL|PostgreSQL|MongoDB|Weaviate|Pinecone|FAISS

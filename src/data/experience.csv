@@ -1,0 +1,2 @@
+title,company,duration,type,description,tags
+AI/ML Engineer Intern,RegalRinse,Nov 2025 – Jan 2026,Internship,"Engineered a teacher–student distillation pipeline transferring SOTA Qwen-Image-Edit reasoning into a Stable Diffusion 1.5 + LoRA adapter. Built a synthetic data factory using a 4-bit quantized teacher model.",Qwen|Stable Diffusion|LoRA
