@@ -1,6 +1,5 @@
 import { useState } from 'react';
-
-const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+import emailjs from '@emailjs/browser';
 
 const CONTACT_INFO = [
   { label: 'Email',    value: 'soumil4malik@gmail.com',       href: 'mailto:soumil4malik@gmail.com',          icon: '✉' },
@@ -24,16 +23,16 @@ export default function Contact() {
     setStatus('sending');
 
     try {
-      const res = await fetch(`${BACKEND}/api/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.detail || 'Server error');
-      }
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_email: form.email,
+          subject: form.subject,
+          message: form.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
 
       setStatus('success');
       setForm(INITIAL);
