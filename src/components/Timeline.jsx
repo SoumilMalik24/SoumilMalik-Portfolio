@@ -34,7 +34,7 @@ export default function Timeline() {
         </div>
 
         {/* Education */}
-        <div className="section-label" style={{ marginTop: 56 }}>Education</div>
+        <div id="education" className="section-label" style={{ marginTop: 56, scrollMarginTop: 100 }}>Education</div>
         <div className="timeline">
           {education.map((ed, i) => (
             <div className="tl-item" key={i}>

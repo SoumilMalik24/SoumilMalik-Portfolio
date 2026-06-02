@@ -1,14 +1,16 @@
 import { useState } from 'react';
 
+const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+
 const CONTACT_INFO = [
-  { label: 'Email',    value: 'soumil4malik@gmail.com', href: 'mailto:soumil4malik@gmail.com', icon: '✉' },
-  { label: 'Phone',    value: '+91 9650799486',           href: 'tel:+919650799486',              icon: '📞' },
-  { label: 'Location', value: 'Delhi, India',             href: null,                             icon: '📍' },
-  { label: 'LinkedIn', value: 'linkedin.com/in/soumilmalik', href: 'https://linkedin.com/in/soumilmalik', icon: '↗' },
-  { label: 'GitHub',   value: 'github.com/SoumilMalik24', href: 'https://github.com/SoumilMalik24',      icon: '↗' },
+  { label: 'Email',    value: 'soumil4malik@gmail.com',       href: 'mailto:soumil4malik@gmail.com',          icon: '✉' },
+  { label: 'Phone',    value: '+91 9650799486',               href: 'tel:+919650799486',                      icon: '📞' },
+  { label: 'Location', value: 'Delhi, India',                 href: null,                                     icon: '📍' },
+  { label: 'LinkedIn', value: 'linkedin/soumilmalik24',       href: 'https://linkedin.com/in/soumilmalik24',  icon: '↗' },
+  { label: 'GitHub',   value: 'github/SoumilMalik24',         href: 'https://github.com/SoumilMalik24',       icon: '↗' },
 ];
 
-const INITIAL = { name: '', email: '', subject: '', message: '' };
+const INITIAL = { email: '', subject: '', message: '' };
 
 export default function Contact() {
   const [form, setForm]     = useState(INITIAL);
@@ -22,21 +24,21 @@ export default function Contact() {
     setStatus('sending');
 
     try {
-      // Send the data to your backend
-      const res = await fetch('YOUR_BACKEND_URL_HERE/contact', {
+      const res = await fetch(`${BACKEND}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
 
       if (!res.ok) {
-        throw new Error('Server error');
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'Server error');
       }
 
       setStatus('success');
       setForm(INITIAL);
     } catch (err) {
-      console.error('Failed to send message:', err);
+      console.error('Contact error:', err);
       setStatus('error');
     }
   };
@@ -53,8 +55,8 @@ export default function Contact() {
               Let's build something<br /><em>great together.</em>
             </h2>
             <p className="contact-sub">
-              Open to freelance projects, full-time roles, and collaborations
-              in LLM engineering, RAG systems, or agent design.
+              Open to full-time roles, freelance projects, and collaborations
+              in Agentic AI, LLMOps, RAG systems, or agent design.
             </p>
 
             <div className="contact-cards">
@@ -76,35 +78,21 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right — form */}
+          {/* Right — form (3 fields: email, subject, message) */}
           <form className="contact-form" onSubmit={handleSubmit} noValidate>
-            <div className="form-row">
-              <div className="form-field">
-                <label className="form-label" htmlFor="name">Your Name</label>
-                <input
-                  id="name"
-                  name="name"
-                  className="form-input"
-                  type="text"
-                  placeholder="Rahul Sharma"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-field">
-                <label className="form-label" htmlFor="email">Your Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  className="form-input"
-                  type="email"
-                  placeholder="rahul@company.com"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+
+            <div className="form-field">
+              <label className="form-label" htmlFor="email">Your Email</label>
+              <input
+                id="email"
+                name="email"
+                className="form-input"
+                type="email"
+                placeholder="rahul@company.com"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
             </div>
 
             <div className="form-field">
@@ -131,7 +119,7 @@ export default function Contact() {
                 value={form.message}
                 onChange={handleChange}
                 required
-                rows={5}
+                rows={6}
               />
             </div>
 
@@ -150,7 +138,7 @@ export default function Contact() {
             )}
             {status === 'error' && (
               <div className="form-feedback form-feedback--err">
-                ✕ Something went wrong. Try emailing me directly.
+                ✕ Something went wrong. Please email me directly at soumil4malik@gmail.com
               </div>
             )}
           </form>

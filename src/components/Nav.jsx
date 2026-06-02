@@ -12,12 +12,13 @@ export default function Nav() {
 
         {/* Desktop links */}
         <div className="nav-links">
-          <a className="nav-link" href="#about"    onClick={close}>About</a>
-          <a className="nav-link" href="#projects" onClick={close}>Projects</a>
-          <a className="nav-link" href="#timeline" onClick={close}>Experience</a>
-          <a className="nav-link" href="#stack"    onClick={close}>Stack</a>
-          <a className="nav-link" href="#skills"   onClick={close}>Skills</a>
-          <a className="nav-link" href="#contact"  onClick={close}>Contact</a>
+          <a className="nav-link" href="#about"     onClick={close}>About</a>
+          <a className="nav-link" href="#projects"  onClick={close}>Projects</a>
+          <a className="nav-link" href="#timeline"  onClick={close}>Experience</a>
+          <a className="nav-link" href="#education" onClick={close}>Education</a>
+          <a className="nav-link" href="#stack"     onClick={close}>Stack</a>
+          <a className="nav-link" href="#skills"    onClick={close}>Skills</a>
+          <a className="nav-link" href="#contact"   onClick={close}>Contact</a>
         </div>
 
         <div className="nav-right">
@@ -38,11 +39,12 @@ export default function Nav() {
 
       {/* Mobile drawer */}
       <div className={`mobile-menu ${menuOpen ? 'mobile-menu--open' : ''}`}>
-        <a className="mobile-menu-link" href="#about"    onClick={close}>About</a>
-        <a className="mobile-menu-link" href="#projects" onClick={close}>Projects</a>
-        <a className="mobile-menu-link" href="#timeline" onClick={close}>Experience</a>
-        <a className="mobile-menu-link" href="#stack"    onClick={close}>Stack</a>
-        <a className="mobile-menu-link" href="#skills"   onClick={close}>Skills</a>
+        <a className="mobile-menu-link" href="#about"     onClick={close}>About</a>
+        <a className="mobile-menu-link" href="#projects"  onClick={close}>Projects</a>
+        <a className="mobile-menu-link" href="#timeline"  onClick={close}>Experience</a>
+        <a className="mobile-menu-link" href="#education" onClick={close}>Education</a>
+        <a className="mobile-menu-link" href="#stack"     onClick={close}>Stack</a>
+        <a className="mobile-menu-link" href="#skills"    onClick={close}>Skills</a>
         <a className="mobile-menu-link mobile-menu-link--cta" href="#contact" onClick={close}>Contact</a>
       </div>
 

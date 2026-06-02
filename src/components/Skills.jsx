@@ -1,10 +1,9 @@
 const SKILLS = [
-  { name: 'LLM Engineering',  pct: 95 },
+  { name: 'LLM Engineering',  pct: 85 },
   { name: 'RAG & Retrieval',  pct: 90 },
-  { name: 'Agent Design',     pct: 87 },
-  { name: 'Fine-tuning',      pct: 82 },
-  { name: 'MLOps / Infra',   pct: 77 },
-  { name: 'Python / Backend', pct: 92 },
+  { name: 'Agent Design',     pct: 89 },
+  { name: 'MLOps / Infra',    pct: 80 },
+  { name: 'Python / Backend', pct: 90 },
 ];
 
 export default function Skills() {
