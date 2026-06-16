@@ -32,8 +32,10 @@ export default function ChatbotWidget() {
     return () => { clearTimeout(timeout); controller.abort(); };
   }, []);
 
-  if (backendOk === null) return null;
-  if (backendOk === false) return null;
+  if (backendOk === null) return null; // still pinging, wait silently
+
+  // Don't return null when backend is offline — always show the FAB button.
+  // Offline state is handled inside the chat window with a message.
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -104,14 +106,20 @@ export default function ChatbotWidget() {
         </div>
 
         <form className="chat-input-row" onSubmit={handleSend}>
-          <input
-            type="text"
-            placeholder="Ask about projects, skills..."
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            disabled={loading}
-          />
-          <button type="submit" className="chat-send" disabled={loading || !input.trim()}>↑</button>
+          {backendOk === false ? (
+            <p style={{ flex: 1, fontSize: 12, color: 'var(--stone-deep)', padding: '4px 2px' }}>
+              AI assistant is currently offline.
+            </p>
+          ) : (
+            <input
+              type="text"
+              placeholder="Ask about projects, skills..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              disabled={loading}
+            />
+          )}
+          <button type="submit" className="chat-send" disabled={loading || !input.trim() || backendOk === false}>↑</button>
         </form>
       </div>
     </>
