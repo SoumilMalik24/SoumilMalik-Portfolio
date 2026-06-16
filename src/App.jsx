@@ -10,15 +10,19 @@ import Skills from './components/Skills';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ChatbotWidget from './components/ChatbotWidget';
+import ScrollToTop from './components/ScrollToTop';
+import useTheme from './hooks/useTheme';
 
 export default function App() {
+  const [theme, toggleTheme] = useTheme();
+
   return (
     <div className="site">
       <div className="blob blob-1" />
       <div className="blob blob-2" />
       <div className="blob blob-3" />
       <TopBar />
-      <Nav />
+      <Nav theme={theme} onToggleTheme={toggleTheme} />
       <Hero />
       <Band />
       <About />
@@ -29,6 +33,7 @@ export default function App() {
       <Contact />
       <Footer />
       <ChatbotWidget />
+      <ScrollToTop />
     </div>
   );
 }

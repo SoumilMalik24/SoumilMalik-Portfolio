@@ -8,16 +8,32 @@ const WELCOME = {
 };
 
 export default function ChatbotWidget() {
-  const [isOpen,   setIsOpen]   = useState(false);
-  const [messages, setMessages] = useState([WELCOME]);
-  const [input,    setInput]    = useState('');
-  const [loading,  setLoading]  = useState(false);
+  const [isOpen,     setIsOpen]   = useState(false);
+  const [messages,   setMessages] = useState([WELCOME]);
+  const [input,      setInput]    = useState('');
+  const [loading,    setLoading]  = useState(false);
+  const [backendOk,  setBackendOk] = useState(null);
   const bottomRef = useRef(null);
 
   // Auto-scroll to latest message
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2000);
+
+    fetch(`${BACKEND}/health`, { signal: controller.signal })
+      .then((res) => { setBackendOk(res.ok); })
+      .catch(() => { setBackendOk(false); })
+      .finally(() => clearTimeout(timeout));
+
+    return () => { clearTimeout(timeout); controller.abort(); };
+  }, []);
+
+  if (backendOk === null) return null;
+  if (backendOk === false) return null;
 
   const handleSend = async (e) => {
     e.preventDefault();

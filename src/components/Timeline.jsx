@@ -1,8 +1,10 @@
 import { experience, education } from '../data';
+import useInView from '../hooks/useInView';
 
 export default function Timeline() {
+  const [ref, inView] = useInView();
   return (
-    <section id="timeline" className="section-outer">
+    <section id="timeline" className={`section-outer ${inView ? 'in-view' : ''}`} ref={ref}>
       <div className="section-inner">
         {/* Experience */}
         <div className="section-label">Experience</div>

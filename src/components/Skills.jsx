@@ -1,3 +1,5 @@
+import useInView from '../hooks/useInView';
+
 const SKILLS = [
   { name: 'LLM Engineering',  pct: 85 },
   { name: 'RAG & Retrieval',  pct: 90 },
@@ -7,8 +9,9 @@ const SKILLS = [
 ];
 
 export default function Skills() {
+  const [ref, inView] = useInView();
   return (
-    <section id="skills" className="section-outer">
+    <section id="skills" className={`section-outer ${inView ? 'in-view' : ''}`} ref={ref}>
       <div className="section-inner">
         <div className="section-label">Proficiency</div>
         <div className="skills-grid">

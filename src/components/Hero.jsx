@@ -1,8 +1,11 @@
+import heroImg from '../assets/hero.jpg';
+
 export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-left">
         <div className="hero-eyebrow">AI &amp; Machine Learning Engineer</div>
+        <img className="hero-photo mobile-only" src={heroImg} alt="Soumil Malik" />
         <h1 className="hero-h1">
           Building<br />
           systems that<br />
@@ -25,6 +28,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-stats">
+        <img className="hero-photo desktop-only" src={heroImg} alt="Soumil Malik" />
         <div className="hero-stat-item">
           <div className="stat-number">8.62</div>
           <div className="stat-label">CGPA</div>

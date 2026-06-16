@@ -1,6 +1,9 @@
+import useInView from '../hooks/useInView';
+
 export default function About() {
+  const [ref, inView] = useInView();
   return (
-    <section id="about" className="section-outer">
+    <section id="about" className={`section-outer ${inView ? 'in-view' : ''}`} ref={ref}>
       <div className="section-inner">
         <div className="section-label">Profile</div>
         <div className="profile-grid">
@@ -16,18 +19,40 @@ export default function About() {
             </p>
           </div>
           <div className="profile-info">
+            <div className="exploring-label">Currently Exploring</div>
             {[
-              { k: 'Location', v: 'Delhi, India' },
-              { k: 'Phone',    v: '+91 9650799486' },
-              { k: 'Focus',    v: 'Agentic AI · LLMOps' },
-              { k: 'Email',    v: 'soumil4malik@gmail.com' },
-              { k: 'Status',   v: 'Open to Work', green: true },
-            ].map(({ k, v, green }) => (
-              <div className="info-row" key={k}>
-                <span className="info-key">{k}</span>
-                <span className="info-val" style={green ? { color: '#8ab07a' } : {}}>
-                  {v}
-                </span>
+              {
+                topic: 'AI Scalability',
+                note: 'Scaling LLM inference and agent workloads across distributed systems under production load',
+                tag: 'Infra',
+              },
+              {
+                topic: 'Backend Systems',
+                note: 'Designing async task queues, event-driven APIs, and high-throughput data pipelines',
+                tag: 'Backend',
+              },
+              {
+                topic: 'Advanced RAG Concepts',
+                note: 'Hybrid retrieval, re-ranking, late chunking, and contextual compression techniques',
+                tag: 'RAG',
+              },
+              {
+                topic: 'LLM Evaluation & Observability',
+                note: 'Building eval harnesses, tracing agent runs, and detecting model drift in production',
+                tag: 'LLMOps',
+              },
+              {
+                topic: 'Multi-Agent Orchestration',
+                note: 'Coordinating specialized sub-agents with shared memory and fault-tolerant handoffs',
+                tag: 'Agents',
+              },
+            ].map(({ topic, note, tag }) => (
+              <div className="explore-row" key={topic}>
+                <div className="explore-top">
+                  <span className="explore-topic">{topic}</span>
+                  <span className="explore-tag">{tag}</span>
+                </div>
+                <p className="explore-note">{note}</p>
               </div>
             ))}
           </div>

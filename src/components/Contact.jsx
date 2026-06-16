@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import emailjs from '@emailjs/browser';
+import useInView from '../hooks/useInView';
 
 const CONTACT_INFO = [
   { label: 'Email',    value: 'soumil4malik@gmail.com',       href: 'mailto:soumil4malik@gmail.com',          icon: '✉' },
@@ -12,6 +13,7 @@ const CONTACT_INFO = [
 const INITIAL = { email: '', subject: '', message: '' };
 
 export default function Contact() {
+  const [ref, inView] = useInView();
   const [form, setForm]     = useState(INITIAL);
   const [status, setStatus] = useState(null); // null | 'sending' | 'success' | 'error'
 
@@ -43,7 +45,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="section-outer">
+    <section id="contact" className={`section-outer ${inView ? 'in-view' : ''}`} ref={ref}>
       <div className="section-inner">
         <div className="section-label">Get In Touch</div>
 
