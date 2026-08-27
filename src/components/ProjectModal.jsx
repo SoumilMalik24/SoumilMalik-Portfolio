@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 
 export default function ProjectModal({ project, onClose }) {
   useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
   if (!project) return null;
@@ -12,34 +14,99 @@ export default function ProjectModal({ project, onClose }) {
   const tags = Array.isArray(project.tags) ? project.tags : [project.tags];
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
-        <div className="modal-num">{project.num}</div>
-        <h2 className="modal-name">{project.name}</h2>
-        <div className="modal-tags">
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(9, 10, 15, 0.75)',
+        backdropFilter: 'blur(8px)',
+        zIndex: 100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+      }}
+      onClick={onClose}
+    >
+      <div
+        className="card"
+        style={{
+          maxWidth: '640px',
+          width: '100%',
+          padding: '28px',
+          position: 'relative',
+          backgroundColor: 'var(--bg-card)',
+          boxShadow: 'var(--shadow-lg)',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '18px',
+            right: '18px',
+            color: 'var(--text-secondary)',
+            fontSize: '18px',
+          }}
+          aria-label="Close modal"
+        >
+          ✕
+        </button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <span className="badge badge-indigo">SYS_0{project.num}</span>
+          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)' }}>
+            Production Architecture
+          </span>
+        </div>
+
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px' }}>
+          {project.name}
+        </h2>
+
+        <div className="proj-tags-row" style={{ marginBottom: '18px' }}>
           {tags.map((t) => (
-            <span className="proj-tag" key={t}>{t}</span>
+            <span key={t} className="badge badge-cyan" style={{ fontSize: '11px' }}>
+              {t}
+            </span>
           ))}
         </div>
-        <p className="modal-desc">{project.description}</p>
-        <div className="modal-actions">
+
+        <div style={{ background: 'var(--bg-surface)', padding: '16px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)', marginBottom: '24px' }}>
+          <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--accent-indigo)', textTransform: 'uppercase', marginBottom: '6px', fontWeight: 600 }}>
+            Architecture Breakdown
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
+            {project.description}
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           {project.github && (
-            <a className="proj-btn proj-btn--code" href={project.github} target="_blank" rel="noreferrer">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-              </svg>
-              View Code
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-solid"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>
+                code
+              </span>
+              <span>View GitHub Repository</span>
             </a>
           )}
           {project.live && project.live !== '#' && project.live !== '' && (
-            <a className="proj-btn proj-btn--live" href={project.live} target="_blank" rel="noreferrer">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15,3 21,3 21,9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-              Live Demo
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-outline"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>
+                open_in_new
+              </span>
+              <span>Open Live Demo ↗</span>
             </a>
           )}
         </div>

@@ -1,32 +1,55 @@
 export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer-inner">
-        <div className="footer-brand">
-          <div className="footer-logo">Soumil Malik</div>
-          <div className="footer-tagline">
-            CS undergraduate specializing in Agentic AI and LLMOps.
+    <footer className="site-footer">
+      <div className="site-container">
+        <div className="footer-row">
+          <div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '15px', color: 'var(--text-primary)' }}>
+              Soumil Malik
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              CS Undergraduate · Agentic AI &amp; LLMOps Engineer · Delhi, India
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '20px', fontSize: '13px' }}>
+            <a
+              href="https://github.com/SoumilMalik24"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: 'var(--text-secondary)', transition: 'color 0.2s' }}
+            >
+              GitHub ↗
+            </a>
+            <a
+              href="https://linkedin.com/in/soumilmalik24"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: 'var(--text-secondary)', transition: 'color 0.2s' }}
+            >
+              LinkedIn ↗
+            </a>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: 'var(--text-secondary)', transition: 'color 0.2s' }}
+            >
+              Resume (PDF) ↗
+            </a>
+            <a
+              href="mailto:soumil4malik@gmail.com"
+              style={{ color: 'var(--text-secondary)', transition: 'color 0.2s' }}
+            >
+              Email ↗
+            </a>
           </div>
         </div>
-        <div>
-          <div className="footer-col-title">Navigation</div>
-          <a className="footer-link" href="#about">About</a>
-          <a className="footer-link" href="#projects">Projects</a>
-          <a className="footer-link" href="#timeline">Experience</a>
-          <a className="footer-link" href="#education">Education</a>
-          <a className="footer-link" href="#stack">Stack</a>
-          <a className="footer-link" href="#skills">Skills</a>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)', fontSize: '12px', color: 'var(--text-tertiary)', flexWrap: 'wrap', gap: '8px' }}>
+          <div>© {new Date().getFullYear()} Soumil Malik · All rights reserved</div>
+          <div>Built with React 19 &amp; Vite · Minimalist High-Craft UI</div>
         </div>
-        <div>
-          <div className="footer-col-title">Contact</div>
-          <span className="footer-link">+91 9650799486</span>
-          <span className="footer-link">soumil4malik@gmail.com</span>
-          <span className="footer-link">Delhi, India</span>
-        </div>
-      </div>
-      <div className="footer-bottom">
-        <div className="footer-copy">© 2026 Soumil Malik</div>
-        <div className="footer-copy">Agentic AI &amp; LLMOps</div>
       </div>
     </footer>
   );

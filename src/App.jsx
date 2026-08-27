@@ -1,38 +1,61 @@
+import { useState } from 'react';
 import TopBar from './components/TopBar';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
-import Band from './components/Band';
-import About from './components/About';
+import DagWorkflowStudio from './components/DagWorkflowStudio';
 import Projects from './components/Projects';
-import Timeline from './components/Timeline';
-import Stack from './components/Stack';
 import Skills from './components/Skills';
+import About from './components/About';
+import Timeline from './components/Timeline';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ChatbotWidget from './components/ChatbotWidget';
 import ScrollToTop from './components/ScrollToTop';
+import CommandPalette from './components/CommandPalette';
 import useTheme from './hooks/useTheme';
 
 export default function App() {
   const [theme, toggleTheme] = useTheme();
+  const [isCmdOpen, setIsCmdOpen] = useState(false);
 
   return (
-    <div className="site">
-      <div className="blob blob-1" />
-      <div className="blob blob-2" />
-      <div className="blob blob-3" />
+    <div className="app-wrapper">
+      {/* Global Command Palette (⌘K) */}
+      <CommandPalette
+        isOpen={isCmdOpen}
+        onClose={() => setIsCmdOpen(false)}
+        onToggleTheme={toggleTheme}
+        theme={theme}
+      />
+
+      {/* Top Status Telemetry */}
       <TopBar />
-      <Nav theme={theme} onToggleTheme={toggleTheme} />
-      <Hero />
-      <Band />
-      <About />
-      <Projects />
-      <Timeline />
-      <Stack />
-      <Skills />
-      <Contact />
+
+      {/* Modern Navigation Header */}
+      <Nav
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onOpenCmd={() => setIsCmdOpen(true)}
+      />
+
+      {/* Main Content Layout */}
+      <main>
+        <Hero onOpenCmd={() => setIsCmdOpen(true)} />
+        <DagWorkflowStudio />
+        <Projects />
+        <Skills />
+        <About />
+        <Timeline />
+        <Contact />
+      </main>
+
+      {/* Clean Footer */}
       <Footer />
+
+      {/* Fast Autonomous Copilot Widget */}
       <ChatbotWidget />
+
+      {/* Scroll to Top Trigger */}
       <ScrollToTop />
     </div>
   );

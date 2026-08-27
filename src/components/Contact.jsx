@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import emailjs from '@emailjs/browser';
-import useInView from '../hooks/useInView';
 
-const CONTACT_INFO = [
-  { label: 'Email',    value: 'soumil4malik@gmail.com',       href: 'mailto:soumil4malik@gmail.com',          icon: '✉' },
-  { label: 'Phone',    value: '+91 9650799486',               href: 'tel:+919650799486',                      icon: '📞' },
-  { label: 'Location', value: 'Delhi, India',                 href: null,                                     icon: '📍' },
-  { label: 'LinkedIn', value: 'linkedin/soumilmalik24',       href: 'https://linkedin.com/in/soumilmalik24',  icon: '↗' },
-  { label: 'GitHub',   value: 'github/SoumilMalik24',         href: 'https://github.com/SoumilMalik24',       icon: '↗' },
+const CHANNELS = [
+  { label: 'Direct Email', value: 'soumil4malik@gmail.com', href: 'mailto:soumil4malik@gmail.com', icon: 'mail', copyable: true },
+  { label: 'Direct Phone', value: '+91 9650799486', href: 'tel:+919650799486', icon: 'call', copyable: true },
+  { label: 'Location', value: 'Delhi, India (UTC+05:30)', href: null, icon: 'location_on', copyable: false },
+  { label: 'LinkedIn', value: 'linkedin.com/in/soumilmalik24', href: 'https://linkedin.com/in/soumilmalik24', icon: 'link', copyable: false },
+  { label: 'GitHub', value: 'github.com/SoumilMalik24', href: 'https://github.com/SoumilMalik24', icon: 'code', copyable: false },
 ];
 
-const INITIAL = { email: '', subject: '', message: '' };
-
 export default function Contact() {
-  const [ref, inView] = useInView();
-  const [form, setForm]     = useState(INITIAL);
-  const [status, setStatus] = useState(null); // null | 'sending' | 'success' | 'error'
+  const [form, setForm] = useState({ email: '', subject: '', message: '' });
+  const [status, setStatus] = useState(null); // 'sending' | 'success' | 'error'
+  const [copiedKey, setCopiedKey] = useState(null);
 
-  const handleChange = (e) =>
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleCopy = (val, key) => {
+    navigator.clipboard.writeText(val);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +37,7 @@ export default function Contact() {
       );
 
       setStatus('success');
-      setForm(INITIAL);
+      setForm({ email: '', subject: '', message: '' });
     } catch (err) {
       console.error('Contact error:', err);
       setStatus('error');
@@ -45,101 +45,142 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className={`section-outer ${inView ? 'in-view' : ''}`} ref={ref}>
-      <div className="section-inner">
-        <div className="section-label">Get In Touch</div>
+    <section id="contact" className="section-wrap">
+      <div className="site-container">
+        {/* Section Header */}
+        <div className="section-head">
+          <div className="section-eyebrow">
+            <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>
+              send
+            </span>
+            <span>Get in Touch</span>
+          </div>
+          <h2 className="section-heading">Let&apos;s Build Something Impactful</h2>
+          <p className="section-description">
+            Open to full-time AI/ML engineer roles, agentic AI contracts, and RAG architecture consulting.
+          </p>
+        </div>
 
-        <div className="contact-grid">
-          {/* Left — info */}
-          <div className="contact-info">
-            <h2 className="contact-heading">
-              Let's build something<br /><em>great together.</em>
-            </h2>
-            <p className="contact-sub">
-              Open to full-time roles, freelance projects, and collaborations
-              in Agentic AI, LLMOps, RAG systems, or agent design.
+        {/* Contact Grid */}
+        <div className="contact-layout">
+          {/* Direct Info */}
+          <div>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '12px' }}>
+              Direct Communication Channels
+            </h3>
+            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
+              Feel free to reach out directly via email, connect on LinkedIn, or fill out the direct transmission form.
             </p>
 
-            <div className="contact-cards">
-              {CONTACT_INFO.map(({ label, value, href, icon }) => (
-                <div className="contact-card" key={label}>
-                  <div className="contact-card-icon">{icon}</div>
-                  <div>
-                    <div className="contact-card-label">{label}</div>
-                    {href ? (
-                      <a className="contact-card-value" href={href} target="_blank" rel="noreferrer">
-                        {value}
-                      </a>
-                    ) : (
-                      <div className="contact-card-value">{value}</div>
-                    )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {CHANNELS.map((ch) => (
+                <div
+                  key={ch.label}
+                  className="card"
+                  style={{
+                    padding: '12px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span className="material-symbols-outlined" style={{ color: 'var(--accent-indigo)', fontSize: '18px' }}>
+                      {ch.icon}
+                    </span>
+                    <div>
+                      <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+                        {ch.label}
+                      </div>
+                      {ch.href ? (
+                        <a href={ch.href} target="_blank" rel="noreferrer" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                          {ch.value}
+                        </a>
+                      ) : (
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{ch.value}</div>
+                      )}
+                    </div>
                   </div>
+
+                  {ch.copyable && (
+                    <button
+                      onClick={() => handleCopy(ch.value, ch.label)}
+                      className="badge"
+                      style={{ cursor: 'pointer', fontSize: '10px' }}
+                    >
+                      {copiedKey === ch.label ? 'Copied!' : 'Copy'}
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right — form (3 fields: email, subject, message) */}
-          <form className="contact-form" onSubmit={handleSubmit} noValidate>
-
-            <div className="form-field">
-              <label className="form-label" htmlFor="email">Your Email</label>
+          {/* Form */}
+          <form className="card contact-card-box" onSubmit={handleSubmit}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }} htmlFor="c-email">
+                Your Email Address
+              </label>
               <input
-                id="email"
-                name="email"
-                className="form-input"
+                id="c-email"
                 type="email"
-                placeholder="rahul@company.com"
+                required
+                className="form-input-field"
+                placeholder="name@company.com"
                 value={form.email}
-                onChange={handleChange}
-                required
+                onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
               />
             </div>
 
-            <div className="form-field">
-              <label className="form-label" htmlFor="subject">Subject</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }} htmlFor="c-subject">
+                Subject
+              </label>
               <input
-                id="subject"
-                name="subject"
-                className="form-input"
+                id="c-subject"
                 type="text"
-                placeholder="RAG pipeline for our product"
-                value={form.subject}
-                onChange={handleChange}
                 required
+                className="form-input-field"
+                placeholder="Agentic AI Opportunity / RAG System"
+                value={form.subject}
+                onChange={e => setForm(prev => ({ ...prev, subject: e.target.value }))}
               />
             </div>
 
-            <div className="form-field">
-              <label className="form-label" htmlFor="message">Message</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }} htmlFor="c-msg">
+                Message
+              </label>
               <textarea
-                id="message"
-                name="message"
-                className="form-input form-textarea"
-                placeholder="Tell me about your project or opportunity..."
-                value={form.message}
-                onChange={handleChange}
+                id="c-msg"
                 required
-                rows={6}
+                rows={5}
+                className="form-input-field"
+                placeholder="Tell me about your team, architecture requirements, or project details..."
+                value={form.message}
+                onChange={e => setForm(prev => ({ ...prev, message: e.target.value }))}
               />
             </div>
 
             <button
-              className="form-submit"
               type="submit"
+              className="btn-accent"
+              style={{ marginTop: '6px' }}
               disabled={status === 'sending'}
             >
-              {status === 'sending' ? 'Sending…' : 'Send Message →'}
+              <span>{status === 'sending' ? 'Sending Message...' : 'Send Message ➔'}</span>
             </button>
 
             {status === 'success' && (
-              <div className="form-feedback form-feedback--ok">
-                ✓ Message sent! I'll get back to you soon.
+              <div className="badge badge-emerald" style={{ padding: '8px 12px', borderRadius: 'var(--radius-sm)' }}>
+                ✓ Message sent successfully! Soumil will get back to you shortly.
               </div>
             )}
+
             {status === 'error' && (
-              <div className="form-feedback form-feedback--err">
-                ✕ Something went wrong. Please email me directly at soumil4malik@gmail.com
+              <div style={{ color: 'var(--accent-rose)', fontSize: '12px', padding: '6px 0' }}>
+                ✕ Error delivering message. Please email soumil4malik@gmail.com directly.
               </div>
             )}
           </form>

@@ -1,85 +1,182 @@
 import { useState } from 'react';
 import { projects } from '../data';
 import ProjectModal from './ProjectModal';
-import useInView from '../hooks/useInView';
 
 export default function Projects() {
-  const [expanded, setExpanded] = useState(null);
-  const [ref, inView] = useInView();
+  const [filter, setFilter] = useState('all');
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  const enrichedProjects = projects.map((p, idx) => ({
+    ...p,
+    num: (idx + 1).toString().padStart(2, '0')
+  }));
+
+  const filtered = enrichedProjects.filter(p => {
+    if (filter === 'all') return true;
+    const str = (Array.isArray(p.tags) ? p.tags.join(' ') : p.tags) + ' ' + p.name + ' ' + p.description;
+    if (filter === 'multi-agent') return str.includes('LangGraph') || str.includes('CrewAI');
+    if (filter === 'mcp') return str.includes('MCP');
+    if (filter === 'mlops') return str.includes('MLOps') || str.includes('AWS') || str.includes('Docker');
+    return true;
+  });
 
   return (
-    <section id="projects" className={`section-outer ${inView ? 'in-view' : ''}`} ref={ref}>
-      <div className="section-inner">
-        <div className="section-label">Selected Projects</div>
-        <div className="projects-grid">
-          {[projects[0], projects[3]].map((p) => (
-            <div className="proj-card" key={p.num} onClick={() => setExpanded(p)}>
-              <div className="proj-num">{p.num}</div>
-              <div className="proj-name">{p.name}</div>
-              <div className="proj-desc">{p.description}</div>
-              <div className="proj-tags">
-                {(Array.isArray(p.tags) ? p.tags : [p.tags]).map((t) => (
-                  <span className="proj-tag" key={t}>{t}</span>
-                ))}
-              </div>
-              <div className="proj-actions">
-                {p.github && (
-                  <a
-                    className="proj-btn proj-btn--code"
-                    href={p.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-                    </svg>
-                    Code
-                  </a>
-                )}
-                {p.live && p.live !== '#' && p.live !== '' && (
-                  <a
-                    className="proj-btn proj-btn--live"
-                    href={p.live}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15,3 21,3 21,9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                    Live
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
+    <section id="projects" className="section-wrap">
+      <div className="site-container">
+        {/* Section Header */}
+        <div className="section-head">
+          <div className="section-eyebrow">
+            <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>
+              terminal
+            </span>
+            <span>Production AI Architectures</span>
+          </div>
+          <h2 className="section-heading">Selected AI Systems &amp; Projects</h2>
+          <p className="section-description">
+            Production multi-agent swarms, FastMCP microservices, and distributed AI infrastructure engineered for reliability.
+          </p>
         </div>
 
-        {/* GitHub CTA */}
-        <div className="projects-github-cta">
-          <p className="projects-github-label">More projects on GitHub</p>
+        {/* Filter Bar */}
+        <div className="projects-filter-bar">
+          <button
+            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+            onClick={() => setFilter('all')}
+          >
+            All Systems ({enrichedProjects.length})
+          </button>
+          <button
+            className={`filter-btn ${filter === 'multi-agent' ? 'active' : ''}`}
+            onClick={() => setFilter('multi-agent')}
+          >
+            Multi-Agent (LangGraph/CrewAI)
+          </button>
+          <button
+            className={`filter-btn ${filter === 'mcp' ? 'active' : ''}`}
+            onClick={() => setFilter('mcp')}
+          >
+            FastMCP Microservices
+          </button>
+          <button
+            className={`filter-btn ${filter === 'mlops' ? 'active' : ''}`}
+            onClick={() => setFilter('mlops')}
+          >
+            MLOps &amp; Infrastructure
+          </button>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="projects-grid">
+          {filtered.map((p) => {
+            const tags = Array.isArray(p.tags) ? p.tags : [p.tags];
+            return (
+              <div
+                key={p.name}
+                className="card card-hover proj-card"
+                onClick={() => setSelectedProject(p)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="proj-top">
+                  <span className="proj-num">0{p.num}</span>
+                  <span className="badge badge-emerald">
+                    <span className="status-dot" />
+                    <span>Production Ready</span>
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="proj-title">{p.name}</h3>
+                  <p className="proj-desc" style={{ marginTop: '8px' }}>
+                    {p.description}
+                  </p>
+                </div>
+
+                <div className="proj-tags-row">
+                  {tags.map((t) => (
+                    <span key={t} className="proj-tag-pill">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="proj-links-row" onClick={e => e.stopPropagation()}>
+                  {p.github && (
+                    <a
+                      href={p.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="proj-link-btn"
+                    >
+                      <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>
+                        code
+                      </span>
+                      <span>GitHub Code</span>
+                    </a>
+                  )}
+                  {p.live && p.live !== '#' && p.live !== '' && (
+                    <a
+                      href={p.live}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="proj-link-btn"
+                      style={{ color: 'var(--accent-cyan)' }}
+                    >
+                      <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>
+                        open_in_new
+                      </span>
+                      <span>Live Deployment ↗</span>
+                    </a>
+                  )}
+                  <button
+                    onClick={() => setSelectedProject(p)}
+                    className="proj-link-btn"
+                    style={{ marginLeft: 'auto', color: 'var(--text-tertiary)' }}
+                  >
+                    <span>Inspect Details ➔</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* GitHub Direct Link Banner */}
+        <div
+          className="card"
+          style={{
+            marginTop: '28px',
+            padding: '20px 24px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '14px',
+          }}
+        >
+          <div>
+            <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)' }}>
+              Looking for more repositories and Jupyter experiments?
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+              Explore Soumil&apos;s full open-source portfolio, evaluation harnesses, and benchmarks on GitHub.
+            </div>
+          </div>
+
           <a
             href="https://github.com/SoumilMalik24"
             target="_blank"
             rel="noreferrer"
-            className="github-cta-btn"
+            className="btn-outline"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            View all projects on GitHub
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15,3 21,3 21,9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
+            <span>GitHub Profile (@SoumilMalik24) ↗</span>
           </a>
         </div>
       </div>
-      <ProjectModal project={expanded} onClose={() => setExpanded(null)} />
+
+      <ProjectModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </section>
   );
 }
