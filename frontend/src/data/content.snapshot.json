@@ -1,0 +1,336 @@
+{
+  "version": 1,
+  "published_at": "2026-11-17T10:54:48.831616Z",
+  "sections": {
+    "profile": {
+      "name": "Soumil Malik",
+      "role": "AI Engineer",
+      "location": "Delhi, India",
+      "status": "Open to work",
+      "open_to_work": true,
+      "portrait": null
+    },
+    "about": {
+      "facts": [
+        {
+          "label": "Role",
+          "value": "AI Engineer"
+        },
+        {
+          "label": "Focus",
+          "value": "Agentic AI, GenAI"
+        },
+        {
+          "label": "Builds",
+          "value": "Multi-agent systems, automations"
+        },
+        {
+          "label": "Based in",
+          "value": "Delhi, India"
+        },
+        {
+          "label": "Status",
+          "value": "Open to work"
+        }
+      ],
+      "paragraphs": [
+        "I’m an AI Engineer based in Delhi, India, working across agentic AI and GenAI. I build multi-agent systems and automations: agents that plan, call tools, share context and hand work to each other, built to hold up outside a demo.",
+        "Most recently I was an AI Engineer Intern at Wobot, where I built n8n automations for internal needs, including a call recording and data extraction pipeline in which three agents work hand in hand for context retention and recall reduction. Before that, at RegalRinse, I distilled Qwen-Image-Edit into a Stable Diffusion 1.5 + LoRA student model.",
+        "I work with LangGraph, CrewAI, LangChain, MCP and n8n, with FastAPI, Celery and Redis underneath. I care less about chatbots and more about agents that reason, recover from failure and return structured outputs other systems can rely on. Open to AI engineering roles where I can keep shipping."
+      ]
+    },
+    "projects": {
+      "items": [
+        {
+          "id": "researchsynth",
+          "num": "01",
+          "name": "ResearchSynth",
+          "description": "Built an autonomous multi-agent research platform using LangGraph with Search, Translation, and Synthesis agents to generate structured markdown research reports with citations from natural language queries. Engineered an async distributed backend using FastAPI, Celery, Redis, async SQLAlchemy, and PostgreSQL.",
+          "tags": [
+            "LangGraph",
+            "LangSmith",
+            "RAG",
+            "FastAPI",
+            "Celery",
+            "Redis",
+            "Pinecone"
+          ],
+          "github": "https://github.com/SoumilMalik24/AI-Research-Synthesizer",
+          "live": "https://ai-research-synthesizer.vercel.app/",
+          "image": null
+        },
+        {
+          "id": "smart-finance-ai",
+          "num": "02",
+          "name": "Smart Finance AI",
+          "description": "Multi-Server MCP platform with isolated microservices for financial math, investment simulation, expense analysis, and inline Base64 chart generation. FastAPI + LangChain orchestrator with session memory, intelligent tool routing, and real-time SSE token streaming.",
+          "tags": [
+            "FastAPI",
+            "LangChain",
+            "MCP",
+            "OpenAI",
+            "React",
+            "SSE"
+          ],
+          "github": "https://github.com/SoumilMalik24/Smart-Finance-AI",
+          "live": "https://smart-finance-ai-nine.vercel.app/",
+          "image": null
+        },
+        {
+          "id": "codelens",
+          "num": "03",
+          "name": "CodeLens",
+          "description": "Developed a 6-agent CrewAI code review system with specialized agents for bug detection, security analysis, performance optimization, best practices, automated fixing, and architectural review across code snippets and full GitHub repositories.",
+          "tags": [
+            "CrewAI",
+            "LangSmith",
+            "FastAPI",
+            "Celery",
+            "Redis",
+            "GitHub API",
+            "Docker"
+          ],
+          "github": "https://github.com/SoumilMalik24/CodeLens-AI-Code-Reviewer",
+          "live": "https://code-lens-ai-code-reviewer.vercel.app/",
+          "image": null
+        }
+      ]
+    },
+    "experience": {
+      "items": [
+        {
+          "id": "ggsipu",
+          "kicker": "Education",
+          "name": "GGSIPU",
+          "role": "B.Tech, Computer Science & Engineering",
+          "when": "2022 – 2026",
+          "dur": "4 yrs",
+          "points": [
+            "Core CS: data structures, operating systems, DBMS, machine learning",
+            "Graduated with a CGPA of 8.62"
+          ],
+          "tools": [
+            "DSA",
+            "ML / DL",
+            "Systems"
+          ]
+        },
+        {
+          "id": "regalrinse",
+          "kicker": "Internship",
+          "name": "RegalRinse",
+          "role": "AI/ML Engineer Intern",
+          "when": "Nov 2025 – Jan 2026",
+          "dur": "3 mo",
+          "points": [
+            "Distilled Qwen-Image-Edit into Stable Diffusion 1.5",
+            "Built a 4-bit quantized synthetic data pipeline",
+            "Trained and shipped the LoRA student adapter"
+          ],
+          "tools": [
+            "Qwen",
+            "Stable Diffusion",
+            "LoRA"
+          ]
+        },
+        {
+          "id": "wobot",
+          "kicker": "Internship",
+          "name": "Wobot",
+          "role": "AI Engineer Intern",
+          "when": "Jul – Sep 2026",
+          "dur": "3 mo",
+          "points": [
+            "Built n8n automations for internal needs",
+            "Shipped a call recording and data extraction pipeline",
+            "Three agents work hand in hand for context retention and recall reduction"
+          ],
+          "tools": [
+            "n8n",
+            "Multi-agent",
+            "LLM agents"
+          ]
+        }
+      ],
+      "next_card": {
+        "enabled": true,
+        "kicker": "Next",
+        "name": "Your team?",
+        "role": "Open to full-time AI engineering roles."
+      }
+    },
+    "skills": {
+      "groups": [
+        {
+          "id": "agentic-ai",
+          "name": "Agentic AI",
+          "bg": "#e8e0d4",
+          "text": "#6b5a42",
+          "pills": [
+            "LangGraph",
+            "CrewAI",
+            "LangChain",
+            "MCP",
+            "RAG",
+            "Hugging Face Transformers",
+            "OpenAI API"
+          ],
+          "tagline": "Agents that plan, call tools and remember.",
+          "featured": [
+            "LangGraph",
+            "MCP",
+            "RAG"
+          ]
+        },
+        {
+          "id": "llmops-automation",
+          "name": "LLMOps & Automation",
+          "bg": "#dce8d4",
+          "text": "#3a5a2c",
+          "pills": [
+            "LangSmith",
+            "Prompt Engineering",
+            "Token Optimization",
+            "Cost Tracking",
+            "n8n",
+            "Make.com"
+          ],
+          "tagline": "Keeping LLM workflows observable, cheap and shipped.",
+          "featured": [
+            "n8n"
+          ]
+        },
+        {
+          "id": "backend-infra",
+          "name": "Backend & Infra",
+          "bg": "#e4dcd0",
+          "text": "#6b4a28",
+          "pills": [
+            "FastAPI",
+            "Flask",
+            "Celery",
+            "Redis",
+            "Docker",
+            "CI/CD",
+            "AWS"
+          ],
+          "tagline": "APIs and infra that hold up in production.",
+          "featured": [
+            "FastAPI",
+            "Docker"
+          ]
+        },
+        {
+          "id": "ml-dl",
+          "name": "ML & DL",
+          "bg": "#dcd8e4",
+          "text": "#4a3a6a",
+          "pills": [
+            "PyTorch",
+            "TensorFlow",
+            "Scikit-learn",
+            "Transfer Learning",
+            "Knowledge Distillation",
+            "MLflow"
+          ],
+          "tagline": "Training, fine-tuning and shrinking models.",
+          "featured": [
+            "PyTorch"
+          ]
+        },
+        {
+          "id": "languages-db",
+          "name": "Languages & DB",
+          "bg": "#d8e4e0",
+          "text": "#2a5a4a",
+          "pills": [
+            "Python",
+            "SQL",
+            "PostgreSQL",
+            "MongoDB",
+            "Weaviate",
+            "Pinecone",
+            "FAISS"
+          ],
+          "tagline": "The languages and stores underneath it all.",
+          "featured": [
+            "Python",
+            "FAISS"
+          ]
+        }
+      ]
+    },
+    "contact": {
+      "email": "soumil4malik@gmail.com",
+      "github": "https://github.com/SoumilMalik24",
+      "linkedin": "https://www.linkedin.com/in/soumilmalik24/",
+      "extra_links": [],
+      "resume_url": null
+    },
+    "seo": {
+      "title": "Soumil Malik — AI Engineer, Agentic AI & GenAI",
+      "description": "Portfolio of Soumil Malik, an AI Engineer in agentic AI and GenAI who builds multi-agent systems and automations.",
+      "og_description": "I build multi-agent systems and automations: agents that plan, call tools, share context and hand work to each other.",
+      "site_url": "https://soumilmalik.dev",
+      "og_image": null
+    },
+    "kirby": {
+      "enabled": true,
+      "display_name": "Kirby",
+      "tour": {
+        "hero": {
+          "state": "happy",
+          "face": null,
+          "lines": [
+            "Hi, I’m Kirby!",
+            "I’ll show you around.",
+            "Click me to ask anything!"
+          ]
+        },
+        "about": {
+          "state": "happy",
+          "face": null,
+          "lines": [
+            "This is Soumil, an **AI Engineer**!",
+            "He builds multi-agent systems.",
+            "And automations that run themselves.",
+            "Agentic AI and GenAI!"
+          ]
+        },
+        "projects": {
+          "state": "excited",
+          "face": null,
+          "lines": [
+            "Ooh, the projects!",
+            "ResearchSynth: multi-agent research.",
+            "Smart Finance AI: MCP servers.",
+            "CodeLens: 6 agents review code.",
+            "Click one to peek inside."
+          ]
+        },
+        "experience": {
+          "state": "proud",
+          "face": "squinted",
+          "lines": [
+            "Hmph! Look at this.",
+            "B.Tech CSE, CGPA 8.62.",
+            "AI/ML intern at RegalRinse.",
+            "Distilled Qwen into SD 1.5.",
+            "Then AI intern at Wobot.",
+            "Built a 3-agent n8n pipeline!",
+            "Pretty impressive, right?"
+          ]
+        },
+        "contact": {
+          "state": "playful",
+          "face": null,
+          "lines": [
+            "Like what you saw?",
+            "Say hi to Soumil!",
+            "He replies fast."
+          ]
+        }
+      }
+    }
+  }
+}

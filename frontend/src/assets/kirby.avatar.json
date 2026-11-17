@@ -1,0 +1,85 @@
+{
+  "name": "Kirby",
+  "body": {
+    "primary": {
+      "type": "sphere",
+      "width": 240,
+      "height": 240,
+      "depth": 240,
+      "roundness": 1
+    },
+    "nodes": [
+      {
+        "surface": {
+          "type": "sphere",
+          "width": 108.11015625000002,
+          "height": 81.60000000000001,
+          "depth": 81.60000000000001,
+          "roundness": 1
+        },
+        "position": [
+          -103.30437876033604,
+          30.4449714479682,
+          -9.784765625
+        ],
+        "rotation": [
+          0,
+          0,
+          -14.843359375
+        ]
+      },
+      {
+        "surface": {
+          "type": "sphere",
+          "width": 108.11015625000002,
+          "height": 81.60000000000001,
+          "depth": 81.60000000000001,
+          "roundness": 1
+        },
+        "position": [
+          98.15429266544173,
+          32.55003025735345,
+          -9.784765625
+        ],
+        "rotation": [
+          0,
+          0,
+          15.175000000000004
+        ]
+      }
+    ]
+  },
+  "colors": {
+    "body": "#ff4a1c",
+    "eyes": "#0f1115"
+  },
+  "face": {
+    "eyes": {
+      "width": 1,
+      "height": 1,
+      "gap": 1,
+      "shiftY": -0.058333333333333334
+    },
+    "nose": {
+      "enabled": false,
+      "shape": "inverted-triangle",
+      "roundness": 50,
+      "width": 14,
+      "height": 11,
+      "x": 0,
+      "y": 22,
+      "angle": 0
+    },
+    "mouth": {
+      "enabled": false,
+      "shape": "curve",
+      "curve": 45,
+      "width": 20,
+      "height": 6,
+      "x": 0,
+      "y": 35,
+      "angle": 0
+    },
+    "perspective": 1
+  }
+}
