@@ -19,8 +19,8 @@ npm run dev
 ## How content reaches the site
 
 1. Edit in `/admin` → Content, save the draft.
-2. Admin → Publish. The backend re-indexes Kirby and calls the Vercel deploy hook.
-3. Vercel rebuilds; the build fetches the new content, so visitors never wait on the API for page content.
+2. Admin → Publish. The backend re-indexes Kirby and calls the deploy hook (a Cloudflare Pages deploy hook; the backend variable is still named `VERCEL_DEPLOY_HOOK_URL`).
+3. Cloudflare Pages rebuilds; the build fetches the new content, so visitors never wait on the API for page content.
 
 Refresh the committed fallback occasionally: `curl $VITE_BACKEND_URL/api/content > src/data/content.snapshot.json`.
 
@@ -41,4 +41,4 @@ Kirby's chat answers come from the backend (`POST /api/agent`).
 
 ## Deploy
 
-Vercel. `vercel.json` rewrites `/admin` to the SPA and caches hashed assets for a year. Set `VITE_BACKEND_URL` in the Vercel project, and create a Deploy Hook there; put its URL in the backend's `VERCEL_DEPLOY_HOOK_URL`.
+Cloudflare Pages. `public/_headers` caches hashed assets for a year, and Pages serves `index.html` for `/admin`. Set `VITE_BACKEND_URL` in the Pages project, and create a Deploy Hook there; put its URL in the backend's `VERCEL_DEPLOY_HOOK_URL`.
