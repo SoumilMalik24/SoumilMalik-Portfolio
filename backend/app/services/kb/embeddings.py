@@ -78,6 +78,57 @@ class HFEmbedder:
         return out
 
 
+class OpenRouterEmbedder:
+    """OpenAI-compatible /embeddings endpoint on OpenRouter. Must return DIMS-dimensional vectors."""
+    model_id = "all-MiniLM-L6-v2"  # same underlying model as HFEmbedder, so existing indexes stay valid
+
+    def __init__(self, url: str, key: str, model: str):
+        if not key:
+            raise EmbeddingError("OPENROUTER_API_KEY is not set")
+        self.url = url
+        self.model = model
+        self.headers = {"Authorization": f"Bearer {key}"}
+
+    def _post(self, batch: List[str]) -> List[List[float]]:
+        last_error = "unknown error"
+        for attempt in range(len(RETRY_DELAYS_S) + 1):
+            try:
+                resp = requests.post(
+                    self.url, json={"model": self.model, "input": batch}, headers=self.headers, timeout=30
+                )
+            except requests.RequestException as exc:
+                last_error = str(exc)
+            else:
+                if resp.status_code == 200:
+                    return self._parse(resp.json(), len(batch))
+                last_error = f"HTTP {resp.status_code}"
+                if resp.status_code not in (429, 500, 502, 503, 504):
+                    break
+            if attempt < len(RETRY_DELAYS_S):
+                time.sleep(RETRY_DELAYS_S[attempt])
+        raise EmbeddingError(f"Embedding request failed: {last_error}")
+
+    @staticmethod
+    def _parse(data: object, expected: int) -> List[List[float]]:
+        rows = data.get("data") if isinstance(data, dict) else None
+        if not isinstance(rows, list) or len(rows) != expected:
+            raise EmbeddingError("Unexpected embedding response shape")
+        rows = sorted(rows, key=lambda r: r.get("index", 0))
+        vectors = []
+        for row in rows:
+            vec = row.get("embedding")
+            if not isinstance(vec, list) or len(vec) != DIMS:
+                raise EmbeddingError(f"Embedding model must return {DIMS} dimensions")
+            vectors.append(normalize([float(v) for v in vec]))
+        return vectors
+
+    def embed(self, texts: List[str]) -> List[List[float]]:
+        out: List[List[float]] = []
+        for i in range(0, len(texts), BATCH_SIZE):
+            out.extend(self._post(texts[i:i + BATCH_SIZE]))
+        return out
+
+
 class FakeEmbedder:
     """Bag-of-words hashing embedder: deterministic, offline, and texts sharing words score higher."""
     model_id = "fake-384"
@@ -99,4 +150,6 @@ def get_embedder() -> Embedder:
     s = get_settings()
     if s.EMBEDDINGS_PROVIDER == "fake":
         return FakeEmbedder()
-    return HFEmbedder(s.HF_EMBEDDINGS_URL, s.HUGGINGFACE_API_TOKEN)
+    if s.EMBEDDINGS_PROVIDER == "hf":
+        return HFEmbedder(s.HF_EMBEDDINGS_URL, s.HUGGINGFACE_API_TOKEN)
+    return OpenRouterEmbedder(s.OPENROUTER_EMBEDDINGS_URL, s.OPENROUTER_API_KEY, s.OPENROUTER_EMBEDDINGS_MODEL)

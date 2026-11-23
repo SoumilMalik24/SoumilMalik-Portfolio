@@ -54,7 +54,9 @@ class Settings(BaseSettings):
     KIRBY_ENABLED: bool = True
     OPENROUTER_API_KEY: str = ""
     OPENROUTER_MODEL: str = "nvidia/nemotron-3-nano-30b-a3b:free"
-    EMBEDDINGS_PROVIDER: str = "hf"
+    EMBEDDINGS_PROVIDER: str = "openrouter"  # openrouter | hf | fake
+    OPENROUTER_EMBEDDINGS_MODEL: str = "sentence-transformers/all-minilm-l6-v2"  # must output 384 dims
+    OPENROUTER_EMBEDDINGS_URL: str = "https://openrouter.ai/api/v1/embeddings"
     HUGGINGFACE_API_TOKEN: str = ""
     HF_EMBEDDINGS_URL: str = (
         "https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2/pipeline/feature-extraction"

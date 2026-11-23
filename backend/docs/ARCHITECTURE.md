@@ -119,7 +119,8 @@ backend/
 | `KIRBY_ENABLED` | `true` | global kill switch |
 | `OPENROUTER_API_KEY` | empty | |
 | `OPENROUTER_MODEL` | `nvidia/nemotron-3-nano-30b-a3b:free` | default when content `kirby.model` is null |
-| `EMBEDDINGS_PROVIDER` | `hf` | `hf` or `fake` (deterministic, tests/dev) |
+| `EMBEDDINGS_PROVIDER` | `openrouter` | `openrouter` (default, uses `OPENROUTER_API_KEY`), `hf`, or `fake` (deterministic, tests/dev) |
+| `OPENROUTER_EMBEDDINGS_MODEL` | `sentence-transformers/all-minilm-l6-v2` | must output 384 dims |
 | `HUGGINGFACE_API_TOKEN` | empty | |
 | `HF_EMBEDDINGS_URL` | `https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2/pipeline/feature-extraction` | |
 | `KB_MIN_SCORE` | `0.35` | below → answer counts as unanswered |

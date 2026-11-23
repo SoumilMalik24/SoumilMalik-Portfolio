@@ -31,7 +31,7 @@ python -m app.cli reindex                                    # build Kirby's kno
 uvicorn app.main:app --reload
 ```
 
-Minimum `.env` for local work: nothing (SQLite, local media, Kirby off). For Kirby set `OPENROUTER_API_KEY` and `HUGGINGFACE_API_TOKEN`. In production `SECRET_KEY` is required.
+Minimum `.env` for local work: nothing (SQLite, local media, Kirby off). For Kirby set `OPENROUTER_API_KEY` (it also serves the embeddings). In production `SECRET_KEY` is required.
 
 ## CLI
 

@@ -9,7 +9,7 @@ from app.cli import main as cli_main
 from app.services.kb import embeddings as emb
 from app.services.kb import index as kb_index
 from app.services.kb.chunker import MAX_NOTE_CHUNK, build_chunks, split_note
-from app.services.kb.embeddings import EmbeddingError, FakeEmbedder, HFEmbedder
+from app.services.kb.embeddings import EmbeddingError, FakeEmbedder, HFEmbedder, OpenRouterEmbedder
 from app.services.system_kv import get_kv
 from tests.conftest import SEED_FILE
 
@@ -73,6 +73,40 @@ def test_hf_embedder_batches_and_retries(monkeypatch):
 def test_hf_embedder_mean_pools_token_vectors():
     out = HFEmbedder._parse([[[1.0, 0.0], [0.0, 1.0]]], 1)
     assert out[0] == pytest.approx([2 ** -0.5, 2 ** -0.5])
+
+
+def test_openrouter_embedder(monkeypatch):
+    import requests
+    from app.services.kb import embeddings as emb
+
+    class Resp:
+        def __init__(self, status, body=None):
+            self.status_code, self._body = status, body
+
+        def json(self):
+            return self._body
+
+    seen = {}
+
+    def fake_post(url, json=None, headers=None, timeout=None):
+        seen.update(url=url, model=json["model"], auth=headers["Authorization"])
+        # Out-of-order rows must be re-sorted by index.
+        rows = [{"index": i, "embedding": [float(i + 1)] + [0.0] * (emb.DIMS - 1)} for i in range(len(json["input"]))]
+        return Resp(200, {"data": list(reversed(rows))})
+
+    monkeypatch.setattr(requests, "post", fake_post)
+    out = OpenRouterEmbedder("https://or.example/emb", "key", "m").embed(["a", "b"])
+    assert seen == {"url": "https://or.example/emb", "model": "m", "auth": "Bearer key"}
+    assert len(out) == 2 and out[0][0] == 1.0 and out[1][0] == 1.0  # L2-normalised
+
+    monkeypatch.setattr(requests, "post", lambda *a, **k: Resp(200, {"data": [{"index": 0, "embedding": [1.0, 2.0]}]}))
+    with pytest.raises(EmbeddingError):  # wrong dimensionality
+        OpenRouterEmbedder("u", "key", "m").embed(["x"])
+    monkeypatch.setattr(requests, "post", lambda *a, **k: Resp(401))
+    with pytest.raises(EmbeddingError):
+        OpenRouterEmbedder("u", "key", "m").embed(["x"])
+    with pytest.raises(EmbeddingError):
+        OpenRouterEmbedder("u", "", "m")
 
 
 def test_chunker(seed_sections):
