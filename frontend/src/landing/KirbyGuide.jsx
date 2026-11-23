@@ -193,7 +193,12 @@ export default function KirbyGuide() {
     history.current = [...history.current, { role: 'assistant', content: res.reply }].slice(-20);
     setBusy(false);
     setAnswer({ reply: res.reply, mood: res.mood });
-    if (res.section && res.section !== current.current) {
+    if (res.section === 'contact') {
+      // The footer is a sticky "curtain" pinned behind the page, so scrollIntoView does nothing for it: scroll to the page end.
+      const end = document.documentElement.scrollHeight - window.innerHeight;
+      if (end - window.scrollY > 8) window.scrollTo({ top: end, behavior: 'smooth' });
+      else ref.current?.poke('nod');
+    } else if (res.section && res.section !== current.current) {
       document.getElementById(res.section)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
       ref.current?.poke('nod');
