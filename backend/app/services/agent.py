@@ -123,6 +123,21 @@ def build_system_prompt(persona: Persona, current_section: Optional[str]) -> str
     return "\n\n".join(lines)
 
 
+EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+
+
+def _scrub_emails(text: str, evidence: List[str]) -> str:
+    """Replace email addresses that appear nowhere in the retrieved portfolio text (the model made them up)."""
+    known = {e.lower() for chunk in evidence for e in EMAIL_RE.findall(chunk)}
+    return EMAIL_RE.sub(lambda m: m.group(0) if m.group(0).lower() in known else "the contact section", text)
+
+
+def _facts_block(hits: List[Tuple[float, str, Optional[str]]]) -> str:
+    facts = "\n\n".join(t for _, t, _ in hits)[:3000]
+    return ("Facts retrieved from the portfolio for the visitor's latest message. Use ONLY these (and later search "
+            "results) for facts, and never state an email address that is not written here:\n" + facts)
+
+
 def _history(messages: List[Any]) -> List[Dict[str, str]]:
     out = []
     for msg in messages:
@@ -161,6 +176,20 @@ def run_agent(
     searched = False
     best_score = 0.0
     final_text = ""
+
+    # Retrieve before calling the model, so grounding never depends on the model choosing to call the search tool.
+    last_user = next((m["content"] for m in reversed(thread) if m["role"] == "user"), "")
+    if last_user:
+        try:
+            hits = search(last_user[:300])
+        except Exception as exc:  # noqa: BLE001 - search failure must not break the chat
+            logger.warning("Kirby pre-search failed: %s", exc)
+            hits = []
+        searched = True
+        if hits:
+            result.chunks.extend({"text": t, "score": round(sc, 4), "section": sec} for sc, t, sec in hits)
+            best_score = max(sc for sc, _, _ in hits)
+            thread[0]["content"] += "\n\n" + _facts_block(hits)
     tokens_in = tokens_out = 0
     saw_usage = False
 
@@ -209,8 +238,14 @@ def run_agent(
         result.latency_ms = int((time.monotonic() - started) * 1000)
         return result
 
+    final_text = _scrub_emails(final_text, [c["text"] for c in result.chunks])
     reply = re.sub(r"\s+", " ", final_text).strip()[:MAX_REPLY_CHARS]
     result.reply = reply or "Hmm, I'm not sure. Try asking another way!"
+    if result.section is None and result.chunks:
+        # The model skipped `navigate`: fall back to the section of the best-matching chunk.
+        top = max(result.chunks, key=lambda c: c["score"])
+        if top["score"] >= min_score and top.get("section") in SECTIONS:
+            result.section = top["section"]
     result.latency_ms = int((time.monotonic() - started) * 1000)
     if saw_usage:
         result.tokens_in, result.tokens_out = tokens_in, tokens_out

@@ -131,7 +131,9 @@ def _last_user_flag(db):
 
 
 def test_unanswered_rules(client, kirby_on, monkeypatch, db):
-    # No search call at all.
+    # Nothing relevant retrieved (the server now always searches before calling the model).
+    monkeypatch.setenv("KB_MIN_SCORE", "0.99")
+    get_settings.cache_clear()
     monkeypatch.setattr(llm, "chat_completion", ScriptedLLM([completion(content="Hello there!")]))
     ask(client, "hi")
     assert _last_user_flag(db) is True
@@ -158,6 +160,19 @@ def test_unanswered_rules(client, kirby_on, monkeypatch, db):
     monkeypatch.setattr(llm, "chat_completion", ScriptedLLM(happy_script()))
     ask(client)
     assert _last_user_flag(db) is False
+
+
+def test_facts_are_retrieved_before_the_model_and_fake_emails_are_removed(client, kirby_on, monkeypatch):
+    script = ScriptedLLM([completion(content="Write to made.up@example.com or real.person@example.com!")])
+    monkeypatch.setattr(llm, "chat_completion", script)
+    from app.services import kb
+    monkeypatch.setattr(kb.index, "search", lambda db, q: [(0.9, "Contact Soumil: email real.person@example.com.", "contact")])
+    res = ask(client, "How can I contact him?")
+    system = script.requests[0]["messages"][0]["content"]
+    assert "real.person@example.com" in system and "Facts retrieved" in system  # no tool call was needed
+    reply = res.json()["reply"]
+    assert "made.up@example.com" not in reply and "real.person@example.com" in reply
+    assert res.json()["section"] == "contact"  # the model never called navigate
 
 
 def test_rate_limit(client, kirby_on, monkeypatch, db):
