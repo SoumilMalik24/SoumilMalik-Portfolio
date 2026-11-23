@@ -118,7 +118,7 @@ backend/
 | `VERCEL_TOKEN`, `VERCEL_PROJECT_ID` | empty | optional, enables build-status polling |
 | `KIRBY_ENABLED` | `true` | global kill switch |
 | `OPENROUTER_API_KEY` | empty | |
-| `OPENROUTER_MODEL` | `nvidia/nemotron-3-nano-30b-a3b:free` | default when content `kirby.model` is null |
+| `OPENROUTER_MODEL` | `nvidia/nemotron-3.5-lightning:free` | default when content `kirby.model` is null |
 | `EMBEDDINGS_PROVIDER` | `openrouter` | `openrouter` (default, uses `OPENROUTER_API_KEY`), `hf`, or `fake` (deterministic, tests/dev) |
 | `OPENROUTER_EMBEDDINGS_MODEL` | `sentence-transformers/all-minilm-l6-v2` | must output 384 dims |
 | `HUGGINGFACE_API_TOKEN` | empty | |

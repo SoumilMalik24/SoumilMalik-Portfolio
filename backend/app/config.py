@@ -53,7 +53,7 @@ class Settings(BaseSettings):
 
     KIRBY_ENABLED: bool = True
     OPENROUTER_API_KEY: str = ""
-    OPENROUTER_MODEL: str = "nvidia/nemotron-3-nano-30b-a3b:free"
+    OPENROUTER_MODEL: str = "nvidia/nemotron-3.5-lightning:free"
     EMBEDDINGS_PROVIDER: str = "openrouter"  # openrouter | hf | fake
     OPENROUTER_EMBEDDINGS_MODEL: str = "sentence-transformers/all-minilm-l6-v2"  # must output 384 dims
     OPENROUTER_EMBEDDINGS_URL: str = "https://openrouter.ai/api/v1/embeddings"

@@ -17,7 +17,7 @@ def chat_completion(
     messages: List[Dict[str, Any]],
     model: str,
     tools: Optional[List[Dict[str, Any]]] = None,
-    max_tokens: int = 250,
+    max_tokens: int = 500,
     temperature: float = 0.4,
 ) -> Dict[str, Any]:
     """Call OpenRouter and return the parsed JSON response."""
@@ -27,6 +27,8 @@ def chat_completion(
         "messages": messages,
         "temperature": temperature,
         "max_tokens": max_tokens,
+        # Reasoning models otherwise spend the whole token budget thinking and return empty text.
+        "reasoning": {"enabled": False},
     }
     if tools:
         payload["tools"] = tools
